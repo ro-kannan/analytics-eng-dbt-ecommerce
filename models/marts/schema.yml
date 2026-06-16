@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: Customer dimension table with country information
+    columns:
+      - name: customer_id
+        description: Unique customer identifier
+        tests:
+          - unique
+          - not_null
+      - name: email
+        description: Customer email address
+        tests:
+          - unique
+          - not_null
+      - name: country_code
+        description: Customer country code
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['IN', 'US', 'UAE', 'SG', 'GB', 'AU', 'DE', 'CA']
+
+  - name: fct_orders
+    description: Orders fact table with revenue metrics
+    columns:
+      - name: order_id
+        description: Unique order identifier
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to dim_customers
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: status
+        description: Order status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['completed', 'shipped', 'returned', 'cancelled', 'pending']
+      - name: revenue
+        description: Revenue amount (0 for non-revenue statuses)
+        tests:
+          - not_null
+
+  - name: customer_orders
+    description: One row per customer with order summary metrics
+    columns:
+      - name: customer_id
+        description: Unique customer identifier
+        tests:
+          - unique
+          - not_null
+      - name: total_revenue
+        description: Total revenue from completed and shipped orders
+        tests:
+          - not_null

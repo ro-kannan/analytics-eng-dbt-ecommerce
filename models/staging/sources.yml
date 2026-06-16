@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: Raw e-commerce data loaded by Fivetran
+    tables:
+      - name: customers
+        description: Raw customer records from source CRM
+      - name: products
+        description: Raw product catalog from source system
+      - name: orders
+        description: Raw order transactions from source system
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+        loaded_at_field: _fivetran_synced
+      - name: order_items
+        description: Raw order line items from source system

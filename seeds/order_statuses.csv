@@ -1,0 +1,6 @@
+status_code,status_label,is_active,is_revenue
+completed,Completed,true,true
+shipped,Shipped,true,true
+returned,Returned,false,false
+cancelled,Cancelled,false,false
+pending,Pending,true,false
